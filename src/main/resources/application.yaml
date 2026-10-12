@@ -3,4 +3,7 @@ server:
 spring:
   application:
     name: play
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/play
 debug: true
