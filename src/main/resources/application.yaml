@@ -6,3 +6,8 @@ spring:
   data:
     mongodb:
       uri: mongodb://localhost:27017/play
+
+jwt:
+  secret: "my-super-secret-key-that-is-at-least-32-characters-long-for-hs256"
+  access-token-expiration-ms: 900000      # 15 minutes
+  refresh-token-expiration-ms: 604800000  # 7 days
