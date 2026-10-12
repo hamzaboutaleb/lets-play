@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.bson.Document;
 
 @RestController
-@RequestMapping("/health")
+@RequestMapping("/api/v1/health")
 public class HealthController {
 
     private final MongoTemplate mongo;
