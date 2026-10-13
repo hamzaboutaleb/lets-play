@@ -12,7 +12,6 @@ public class EmailAlreadyExistsException extends RuntimeException {
 
     public EmailAlreadyExistsException(String email) {
         super("Email already registered: " + email);
-        this.code = "EMAIL_EXISTS";
         this.details = Map.of("email", email);
     }
 }

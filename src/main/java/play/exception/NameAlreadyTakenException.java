@@ -12,7 +12,6 @@ public class NameAlreadyTakenException extends RuntimeException {
 
     public NameAlreadyTakenException(String name) {
         super("Name already taken: " + name);
-        this.code = "NAME_TAKEN";
         this.details = Map.of("name", name);
     }
 }
