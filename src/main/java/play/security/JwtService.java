@@ -42,6 +42,7 @@ public class JwtService {
         return Jwts.builder()
             .subject(userDetails.getUsername())
             .claim("roles", roles)
+            .claim("userId", userDetails.getUser().getId())
             .issuedAt(now)
             .expiration(expiry)
             .signWith(getSigningKey())
@@ -68,5 +69,9 @@ public class JwtService {
 
     public boolean isTokenExpired(String token) {
         return parseClaims(token).getExpiration().before(new Date());
+    }
+
+    public String extractUserId(String token) {
+        return parseClaims(token).get("userId", String.class);
     }
 }
