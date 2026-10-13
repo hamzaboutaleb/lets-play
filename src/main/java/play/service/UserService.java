@@ -3,6 +3,7 @@ package play.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import play.dto.auth.UpdateUserRequest;
 import play.dto.auth.UserResponse;
@@ -15,6 +16,7 @@ import play.repository.UserRepository;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public Page<UserResponse> getAllUsers(Pageable pageable) {
         return userRepository.findAll(pageable)
@@ -36,6 +38,9 @@ public class UserService {
         }
         if (request.getEmail() != null) {
             user.setEmail(request.getEmail());
+        }
+        if (request.getPassword() != null) {
+            user.setPassword(passwordEncoder.encode(request.getPassword()));
         }
 
         User saved = userRepository.save(user);
