@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import play.dto.auth.UserResponse;
+import play.exception.UserNotFoundException;
 import play.model.User;
 import play.repository.UserRepository;
 
@@ -17,6 +18,12 @@ public class UserService {
     public Page<UserResponse> getAllUsers(Pageable pageable) {
         return userRepository.findAll(pageable)
             .map(this::toResponse);
+    }
+
+    public UserResponse getUserById(String id) {
+        return userRepository.findById(id)
+            .map(this::toResponse)
+            .orElseThrow(() -> new UserNotFoundException(id));
     }
 
     private UserResponse toResponse(User user) {
