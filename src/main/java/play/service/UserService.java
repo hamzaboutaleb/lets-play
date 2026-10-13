@@ -47,6 +47,13 @@ public class UserService {
         return toResponse(saved);
     }
 
+    public void deleteUser(String id) {
+        if (!userRepository.existsById(id)) {
+            throw new UserNotFoundException(id);
+        }
+        userRepository.deleteById(id);
+    }
+
     private UserResponse toResponse(User user) {
         return new UserResponse(
             user.getId(),
