@@ -1,5 +1,6 @@
 package play.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,8 +12,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import play.dto.auth.UpdateUserRequest;
-import play.dto.auth.UserResponse;
+import play.dto.user.UpdateUserRequest;
+import play.dto.user.UserResponse;
 import play.dto.common.ApiResponse;
 import play.service.UserService;
 

@@ -1,4 +1,4 @@
-package play.dto.auth;
+package play.dto.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

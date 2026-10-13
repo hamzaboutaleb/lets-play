@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import play.dto.auth.AuthResponse;
 import play.dto.auth.LoginRequest;
 import play.dto.auth.RegisterRequest;
-import play.dto.auth.UserResponse;
+import play.dto.user.UserResponse;
 import play.exception.EmailAlreadyExistsException;
 import play.exception.NameAlreadyTakenException;
 import play.model.Role;
