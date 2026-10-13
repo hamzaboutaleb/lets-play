@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +18,7 @@ import play.dto.product.ProductResponse;
 import play.dto.product.CreateProductRequest;
 import play.dto.product.UpdateProductRequest;
 import play.dto.common.ApiResponse;
+import play.security.CustomUserDetails;
 import play.service.ProductService;
 
 @RestController
@@ -37,18 +39,23 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<ProductResponse>> createProduct(@Valid @RequestBody CreateProductRequest request) {
-        return ResponseEntity.ok(ApiResponse.ok(productService.createProduct(request, null)));
+    public ResponseEntity<ApiResponse<ProductResponse>> createProduct(@Valid @RequestBody CreateProductRequest request,
+                                                                     @AuthenticationPrincipal CustomUserDetails userDetails) {
+        String userId = userDetails.getUser().getId();
+        return ResponseEntity.ok(ApiResponse.ok(productService.createProduct(request, userId)));
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<ApiResponse<ProductResponse>> updateProduct(@PathVariable String id, @Valid @RequestBody UpdateProductRequest request) {
-        return ResponseEntity.ok(ApiResponse.ok(productService.updateProduct(id, request)));
+    public ResponseEntity<ApiResponse<ProductResponse>> updateProduct(@PathVariable String id, @Valid @RequestBody UpdateProductRequest request,
+                                                                     @AuthenticationPrincipal CustomUserDetails userDetails) {
+        String userId = userDetails.getUser().getId();
+        return ResponseEntity.ok(ApiResponse.ok(productService.updateProduct(id, request, userId)));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteProduct(@PathVariable String id) {
-        productService.deleteProduct(id);
+    public ResponseEntity<Void> deleteProduct(@PathVariable String id, @AuthenticationPrincipal CustomUserDetails userDetails) {
+        String userId = userDetails.getUser().getId();
+        productService.deleteProduct(id, userId);
         return ResponseEntity.noContent().build();
     }
 }

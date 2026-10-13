@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import play.dto.product.ProductResponse;
 import play.dto.product.CreateProductRequest;
 import play.dto.product.UpdateProductRequest;
+import play.exception.AccessDeniedException;
 import play.exception.ProductNotFoundException;
 import play.model.Product;
 import play.repository.ProductRepository;
@@ -29,14 +30,48 @@ public class ProductService {
     }
 
     public ProductResponse createProduct(CreateProductRequest request, String userId) {
-        return null;
+        Product product = Product.builder()
+            .name(request.getName())
+            .description(request.getDescription())
+            .price(request.getPrice())
+            .userId(userId)
+            .build();
+
+        Product saved = productRepository.save(product);
+        return toResponse(saved);
     }
 
-    public ProductResponse updateProduct(String id, UpdateProductRequest request) {
-        return null;
+    public ProductResponse updateProduct(String id, UpdateProductRequest request, String userId) {
+        Product product = productRepository.findById(id)
+            .orElseThrow(() -> new ProductNotFoundException(id));
+
+        if (!product.getUserId().equals(userId)) {
+            throw new AccessDeniedException("Not authorized to update this product");
+        }
+
+        if (request.getName() != null) {
+            product.setName(request.getName());
+        }
+        if (request.getDescription() != null) {
+            product.setDescription(request.getDescription());
+        }
+        if (request.getPrice() != null) {
+            product.setPrice(request.getPrice());
+        }
+
+        Product saved = productRepository.save(product);
+        return toResponse(saved);
     }
 
-    public void deleteProduct(String id) {
+    public void deleteProduct(String id, String userId) {
+        Product product = productRepository.findById(id)
+            .orElseThrow(() -> new ProductNotFoundException(id));
+
+        if (!product.getUserId().equals(userId)) {
+            throw new AccessDeniedException("Not authorized to delete this product");
+        }
+
+        productRepository.deleteById(id);
     }
 
     private ProductResponse toResponse(Product product) {
