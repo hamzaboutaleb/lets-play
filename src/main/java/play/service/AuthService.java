@@ -48,30 +48,27 @@ public class AuthService {
         String token = jwtService.generateToken(userDetails);
 
         UserResponse userResponse = new UserResponse(
-            saved.getId(),
-            saved.getName(),
-            saved.getEmail(),
-            saved.getRole().name()
-        );
+                saved.getId(),
+                saved.getName(),
+                saved.getEmail(),
+                saved.getRole().name());
 
         return new AuthResponse(token, "Bearer", userResponse);
     }
 
     public AuthResponse login(LoginRequest request) {
         Authentication authToken = new UsernamePasswordAuthenticationToken(
-            request.getEmail(), request.getPassword()
-        );
+                request.getEmail(), request.getPassword());
         Authentication authenticated = authenticationManager.authenticate(authToken);
 
         CustomUserDetails userDetails = (CustomUserDetails) authenticated.getPrincipal();
         String token = jwtService.generateToken(userDetails);
 
         UserResponse userResponse = new UserResponse(
-            userDetails.getUser().getId(),
-            userDetails.getUser().getName(),
-            userDetails.getUser().getEmail(),
-            userDetails.getUser().getRole().name()
-        );
+                userDetails.getUser().getId(),
+                userDetails.getUser().getName(),
+                userDetails.getUser().getEmail(),
+                userDetails.getUser().getRole().name());
 
         return new AuthResponse(token, "Bearer", userResponse);
     }
