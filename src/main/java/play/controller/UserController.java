@@ -43,7 +43,8 @@ public class UserController {
 
     @PatchMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ApiResponse<UserResponse>> updateUser(@PathVariable String id, @Valid @RequestBody UpdateUserRequest request) {
+    public ResponseEntity<ApiResponse<UserResponse>> updateUser(@PathVariable String id,
+            @Valid @RequestBody UpdateUserRequest request) {
         UserResponse user = userService.updateUser(id, request);
         return ResponseEntity.ok(ApiResponse.ok(user));
     }
@@ -57,15 +58,17 @@ public class UserController {
 
     @GetMapping("/me")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<ApiResponse<UserResponse>> getCurrentUser(@AuthenticationPrincipal CustomUserDetails userDetails) {
+    public ResponseEntity<ApiResponse<UserResponse>> getCurrentUser(
+            @AuthenticationPrincipal CustomUserDetails userDetails) {
         UserResponse user = userService.getUserById(userDetails.getUser().getId());
         return ResponseEntity.ok(ApiResponse.ok(user));
     }
 
     @PatchMapping("/me")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<ApiResponse<UserResponse>> updateCurrentUser(@AuthenticationPrincipal CustomUserDetails userDetails,
-                                                                       @Valid @RequestBody UpdateUserRequest request) {
+    public ResponseEntity<ApiResponse<UserResponse>> updateCurrentUser(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @Valid @RequestBody UpdateUserRequest request) {
         String userId = userDetails.getUser().getId();
         UserResponse user = userService.updateUser(userId, request);
         return ResponseEntity.ok(ApiResponse.ok(user));
