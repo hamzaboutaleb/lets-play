@@ -7,13 +7,18 @@ import org.springframework.stereotype.Service;
 import play.dto.product.ProductResponse;
 import play.dto.product.CreateProductRequest;
 import play.dto.product.UpdateProductRequest;
+import play.model.Product;
+import play.repository.ProductRepository;
 
 @Service
 @RequiredArgsConstructor
 public class ProductService {
 
+    private final ProductRepository productRepository;
+
     public Page<ProductResponse> getAllProducts(Pageable pageable) {
-        return Page.empty(pageable);
+        return productRepository.findAll(pageable)
+            .map(this::toResponse);
     }
 
     public ProductResponse getProductById(String id) {
@@ -29,5 +34,17 @@ public class ProductService {
     }
 
     public void deleteProduct(String id) {
+    }
+
+    private ProductResponse toResponse(Product product) {
+        return new ProductResponse(
+            product.getId(),
+            product.getName(),
+            product.getDescription(),
+            product.getPrice(),
+            product.getUserId(),
+            product.getCreatedAt(),
+            product.getUpdatedAt()
+        );
     }
 }
