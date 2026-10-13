@@ -49,13 +49,17 @@ public class ProductController {
     public ResponseEntity<ApiResponse<ProductResponse>> updateProduct(@PathVariable String id, @Valid @RequestBody UpdateProductRequest request,
                                                                      @AuthenticationPrincipal CustomUserDetails userDetails) {
         String userId = userDetails.getUser().getId();
-        return ResponseEntity.ok(ApiResponse.ok(productService.updateProduct(id, request, userId)));
+        boolean isAdmin = userDetails.getAuthorities().stream()
+            .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+        return ResponseEntity.ok(ApiResponse.ok(productService.updateProduct(id, request, userId, isAdmin)));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable String id, @AuthenticationPrincipal CustomUserDetails userDetails) {
         String userId = userDetails.getUser().getId();
-        productService.deleteProduct(id, userId);
+        boolean isAdmin = userDetails.getAuthorities().stream()
+            .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+        productService.deleteProduct(id, userId, isAdmin);
         return ResponseEntity.noContent().build();
     }
 }

@@ -41,11 +41,11 @@ public class ProductService {
         return toResponse(saved);
     }
 
-    public ProductResponse updateProduct(String id, UpdateProductRequest request, String userId) {
+    public ProductResponse updateProduct(String id, UpdateProductRequest request, String userId, boolean isAdmin) {
         Product product = productRepository.findById(id)
             .orElseThrow(() -> new ProductNotFoundException(id));
 
-        if (!product.getUserId().equals(userId)) {
+        if (!isAdmin && !product.getUserId().equals(userId)) {
             throw new AccessDeniedException("Not authorized to update this product");
         }
 
@@ -63,11 +63,11 @@ public class ProductService {
         return toResponse(saved);
     }
 
-    public void deleteProduct(String id, String userId) {
+    public void deleteProduct(String id, String userId, boolean isAdmin) {
         Product product = productRepository.findById(id)
             .orElseThrow(() -> new ProductNotFoundException(id));
 
-        if (!product.getUserId().equals(userId)) {
+        if (!isAdmin && !product.getUserId().equals(userId)) {
             throw new AccessDeniedException("Not authorized to delete this product");
         }
 
