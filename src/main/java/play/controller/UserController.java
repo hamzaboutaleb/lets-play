@@ -28,8 +28,9 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public String getUserById(@PathVariable String id) {
-        return "Get user by id: " + id;
+    public ResponseEntity<ApiResponse<UserResponse>> getUserById(@PathVariable String id) {
+        UserResponse user = userService.getUserById(id);
+        return ResponseEntity.ok(ApiResponse.ok(user));
     }
 
     @PatchMapping("/{id}")
