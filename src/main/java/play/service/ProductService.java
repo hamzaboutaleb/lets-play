@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import play.dto.product.ProductResponse;
 import play.dto.product.CreateProductRequest;
 import play.dto.product.UpdateProductRequest;
+import play.exception.ProductNotFoundException;
 import play.model.Product;
 import play.repository.ProductRepository;
 
@@ -22,7 +23,9 @@ public class ProductService {
     }
 
     public ProductResponse getProductById(String id) {
-        return null;
+        return productRepository.findById(id)
+            .map(this::toResponse)
+            .orElseThrow(() -> new ProductNotFoundException(id));
     }
 
     public ProductResponse createProduct(CreateProductRequest request, String userId) {
