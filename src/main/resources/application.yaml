@@ -5,7 +5,7 @@ spring:
     name: play
   data:
     mongodb:
-      uri: mongodb://localhost:27017/play
+      uri: mongodb://localhost:27017/play?replicaSet=rs0
 
 jwt:
   secret: "my-super-secret-key-that-is-at-least-32-characters-long-for-hs256"
